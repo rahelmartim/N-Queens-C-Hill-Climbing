@@ -11,7 +11,7 @@ class NQueens:
         resource.setrlimit(resource.RLIMIT_STACK, [0x10000000, resource.RLIM_INFINITY])
         sys.setrecursionlimit(0x100000)
 
-        self.god_vector = list()
+        self.god_vector = []
         self.dimension = 0
         self.conflicts = 0
         self.last_conflicts = 0
@@ -31,7 +31,7 @@ class NQueens:
 
     def new_n_queens(self, dimension_user, climbs_user):
         self.dimension = dimension_user
-        self.god_vector = [0 for x in range(self.dimension)]
+        self.god_vector = [0 for _ in range(self.dimension)]
         self.conflicts = 0
         self.climbs = 0
         self.last_conflicts = 0
@@ -46,12 +46,12 @@ class NQueens:
         self.rand_initial_state()
 
     def show(self):
-        print("Dimensão: " + str(self.dimension))
+        print(f"Dimensão: {str(self.dimension)}")
         #print("god vector: ")
-        print("conflicts: " + str(self.conflicts))
+        print(f"conflicts: {str(self.conflicts)}")
 
     def rand_initial_state(self):
-        possibles = [x for x in range(self.dimension)]
+        possibles = list(range(self.dimension))
         #print(possibles)
         for line_index in range(self.dimension):
             rand_index = randint(0, len(possibles)-1)
@@ -75,19 +75,12 @@ class NQueens:
         #queens = 0
         colum_checks = []
         for x in range(self.dimension):
-            queens = 1
             if self.god_vector[x] not in colum_checks:
-                #print("xxxxxxxx")
-                for y in range(self.dimension):
-                    #print("x :" +str(x))
-                    #print("y :" +str(y))
-                    #print("valor x")
-                    #print(self.god_vector[x])
-                    #print("valor y")
-                    #print(self.god_vector[y])
-                    if x != y:
-                        if self.god_vector[x] == self.god_vector[y]:
-                            queens += 1
+                queens = 1 + sum(
+                    x != y and self.god_vector[x] == self.god_vector[y]
+                    for y in range(self.dimension)
+                )
+
                 if queens > 1:
                     atks = queens * (queens - 1)
                     self.conflicts += atks
@@ -152,12 +145,12 @@ class NQueens:
 
     def end(self):
         print("\n\n============================================\n\n")
-        print("ended with " +str(self.climbs) + " climbs")
-        print("and " +str(self.reestarts) +"reestarts ")
+        print(f"ended with {str(self.climbs)} climbs")
+        print(f"and {str(self.reestarts)}reestarts ")
         print("final god vector")
         print(self.god_vector)
         print("matrix:")
-        m = [[0 for x in range(self.dimension)] for y in range(self.dimension)]
+        m = [[0 for _ in range(self.dimension)] for _ in range(self.dimension)]
         for x in range(self.dimension):
             m[x][self.god_vector[x]] = 1
         for row in m:
@@ -189,7 +182,7 @@ class NQueens:
             return
         else:
             self.climbs += 1
-            print("--" +str(self.climbs) +" | " +str(self.max_climbs) +"--")
+            print(f"--{self.climbs} | {str(self.max_climbs)}--")
             if self.climbs >= self.max_climbs:
                 self.new_n_queens(self.dimension, (self.max_climbs))
             else:
