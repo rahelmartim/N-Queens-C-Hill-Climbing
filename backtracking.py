@@ -20,11 +20,11 @@ def user_input():
                 debug = False
                 while semestre_nao_acabar:
                     debug_check = input('Do you want to enable debug? (y|n): \n')
-                    if (debug_check == "S") or (debug_check == "s") or (debug_check == "Y") or (debug_check == "y"):
+                    if debug_check in ["S", "s", "Y", "y"]:
                         debug = True
                         print("Debug = ON")
                         break
-                    elif (debug_check == "N") or (debug_check == "n"):
+                    elif debug_check in ["N", "n"]:
                         print("Debug = OFF")
                         break
                     else:
@@ -35,12 +35,12 @@ def user_input():
                 all_solutions = False
                 while semestre_nao_acabar:
                     all_solutions_check = input("Do you want to search for all solutions? (y|n) :\n")
-                    if (all_solutions_check == "S") or (all_solutions_check == "s") or (all_solutions_check == "Y") or (all_solutions_check == "y"):
+                    if all_solutions_check in ["S", "s", "Y", "y"]:
                         all_solutions_check = True
                         print("search for all = ON")
                         print("u are crazzy")
                         break
-                    elif (all_solutions_check == "N") or (all_solutions_check == "n"):
+                    elif all_solutions_check in ["N", "n"]:
                         print("search for all = OFF")
                         break
                     else:
@@ -52,8 +52,8 @@ def user_input():
 #starts a matrix that represents the tray with 0's
 def init_board(dimension, debug):
     if debug:
-        print("initializing board " +str(dimension) + "x" + str(dimension))
-    board = [[0 for x in range(dimension)] for y in range(dimension)]
+        print(f"initializing board {str(dimension)}x{str(dimension)}")
+    board = [[0 for _ in range(dimension)] for _ in range(dimension)]
     if debug:
         print("successfully initialized")
         print("board initialized")
@@ -70,7 +70,7 @@ def show_the_solutions(solutions, unique, size):
             for row in solution:
                 print(row)
             print("\n")
-        print("solutions = "+str(len(solutions)))
+        print(f"solutions = {len(solutions)}")
     else:
         if debug:            
             print("first solution : ")
@@ -83,15 +83,14 @@ def show_the_solutions(solutions, unique, size):
 #check if it's possible to put a queen in this position on the board[row][col]
 def can_put_here(board, row, col, dimension):
     if debug:
-        print("initializing position check on (" +str(row) + "|" +str(col) +")")
+        print(f"initializing position check on ({str(row)}|{str(col)})")
     #check if there are any queens on this row
     for aux_col in range(col):
-        if board[row][aux_col] == 1:
-            if debug:
-                print("position not ok")            
-            return False
-        else:
+        if board[row][aux_col] != 1:
             continue
+        if debug:
+            print("position not ok")
+        return False
     if debug:
         print("row ok")
     #check diagonals
